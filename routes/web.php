@@ -1,9 +1,11 @@
 <?php
 
 use App\DataTables\UsersDataTable;
+use App\Helpers\ImageFilter;
 use App\Http\Controllers\ProfileController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use Intervention\Image\ImageManagerStatic ;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +27,15 @@ Route::get('/dashboard', function (UsersDataTable $dataTable) {
     // return view('dashboard', compact('users'));
     return $dataTable->render('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('image', function(){
+    $img = ImageManagerStatic::make('amala.jpg')
+
+    ->filter(new ImageFilter(1));
+
+    //$img->save('amala1.jpg', 80);
+    return $img->response();
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
